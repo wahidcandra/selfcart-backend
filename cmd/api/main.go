@@ -32,7 +32,7 @@ import (
 // @contact.name   API Support
 // @contact.email  support@selfcart.com
 
-// @host
+// @host selfcart-backend-production.up.railway.app
 // @BasePath /api
 
 func main() {
