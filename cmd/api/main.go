@@ -8,6 +8,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"selfcart/internal/config"
 	"selfcart/internal/database"
 	"selfcart/internal/handler"
@@ -22,6 +23,17 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title           SelfCart API
+// @version         1.0
+// @description     Backend API for SelfCart
+// @termsOfService  https://selfcart.com/terms
+
+// @contact.name   API Support
+// @contact.email  support@selfcart.com
+
+// @host
+// @BasePath /api
 
 func main() {
 	_ = godotenv.Load()
@@ -67,8 +79,9 @@ func main() {
 		api.GET("/cart/:cart_id", cartHandler.GetCart)
 		api.POST("/cart/checkout", cartHandler.CheckOut)
 	}
-
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	if os.Getenv("ENABLE_SWAGGER") == "true" {
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 	r.GET("/health", func(c *gin.Context) {
 		c.String(200, "OK")
 	})
