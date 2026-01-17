@@ -129,7 +129,6 @@ definitions:
       transaction_code:
         type: string
     type: object
-host: selfcart-backend-production.up.railway.app
 info:
   contact:
     email: support@selfcart.com
