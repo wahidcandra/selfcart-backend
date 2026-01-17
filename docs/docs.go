@@ -9,7 +9,11 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "https://selfcart.com/terms",
+        "contact": {
+            "name": "API Support",
+            "email": "support@selfcart.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -677,11 +681,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "selfcart-backend-production.up.railway.app",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "Selfcart API",
-	Description:      "Backend API for Selfcart application",
+	Title:            "SelfCart API",
+	Description:      "Backend API for SelfCart",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

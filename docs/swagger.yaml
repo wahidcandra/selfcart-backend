@@ -129,11 +129,14 @@ definitions:
       transaction_code:
         type: string
     type: object
-host: localhost:8080
+host: selfcart-backend-production.up.railway.app
 info:
-  contact: {}
-  description: Backend API for Selfcart application
-  title: Selfcart API
+  contact:
+    email: support@selfcart.com
+    name: API Support
+  description: Backend API for SelfCart
+  termsOfService: https://selfcart.com/terms
+  title: SelfCart API
   version: "1.0"
 paths:
   /cart:
