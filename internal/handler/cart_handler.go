@@ -20,6 +20,17 @@ type CreateCartRequest struct {
 func NewCartHandler(s *service.CartService) *CartHandler {
 	return &CartHandler{service: s}
 }
+
+// CreateCart godoc
+// @Summary Create a new cart
+// @Description Create a new cart for a customer
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param customer_id path int true "Customer ID"
+// @Success 200 {object} repository.Cart
+// @Failure 404 {object} map[string]string
+// @Router /cart [post]
 func (h *CartHandler) CreateCart(c *gin.Context) {
 	var req CreateCartRequest
 
@@ -37,6 +48,18 @@ func (h *CartHandler) CreateCart(c *gin.Context) {
 	c.JSON(http.StatusOK, cart)
 }
 
+// AddItem godoc
+// @Summary Add an item to the cart
+// @Description Add an item to the cart
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param cart_id path int true "Cart ID"
+// @Param barcode path string true "Barcode"
+// @Param action path string true "Action"
+// @Success 200 {object} repository.Cart
+// @Failure 404 {object} map[string]string
+// @Router /cart/add [post]
 func (h *CartHandler) AddItem(c *gin.Context) {
 	var req struct {
 		CartID  int64  `json:"cart_id" binding:"required"`
@@ -57,6 +80,18 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "item added to cart"})
 }
+
+// RemoveItem godoc
+// @Summary Remove an item from the cart
+// @Description Remove an item from the cart
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param cart_id path int true "Cart ID"
+// @Param item_id path int true "Item ID"
+// @Success 200 {object} repository.Cart
+// @Failure 404 {object} map[string]string
+// @Router /cart/remove [post]
 func (h *CartHandler) RemoveItem(c *gin.Context) {
 	var req struct {
 		CartID int64 `json:"cart_id" binding:"required"`
@@ -76,6 +111,16 @@ func (h *CartHandler) RemoveItem(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "item removed from cart"})
 }
 
+// GetCart godoc
+// @Summary Get cart details
+// @Description Get cart details
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param cart_id path int true "Cart ID"
+// @Success 200 {object} repository.Cart
+// @Failure 404 {object} map[string]string
+// @Router /cart/{cart_id} [get]
 func (h *CartHandler) GetCart(c *gin.Context) {
 	cartID, err := strconv.ParseInt(c.Param("cart_id"), 10, 64)
 	if err != nil {
@@ -97,6 +142,16 @@ func (h *CartHandler) GetCart(c *gin.Context) {
 	c.JSON(http.StatusOK, cart)
 }
 
+// CheckOut godoc
+// @Summary Check out the cart
+// @Description Check out the cart
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param cart_id path int true "Cart ID"
+// @Success 200 {object} repository.Transaction
+// @Failure 404 {object} map[string]string
+// @Router /cart/checkout [post]
 func (h *CartHandler) CheckOut(c *gin.Context) {
 	var req struct {
 		CartID int64 `json:"cart_id" binding:"required"`

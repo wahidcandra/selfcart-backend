@@ -1,0 +1,441 @@
+basePath: /api
+definitions:
+  repository.Cart:
+    properties:
+      cart_code:
+        type: string
+      customer_id:
+        type: integer
+      discount:
+        type: integer
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/repository.CartItem'
+        type: array
+      status:
+        type: string
+      total:
+        type: integer
+    type: object
+  repository.CartItem:
+    properties:
+      barcode:
+        type: string
+      discount:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: integer
+      product_id:
+        type: integer
+      qty:
+        type: integer
+      sub_total:
+        type: integer
+    type: object
+  repository.Category:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+    type: object
+  repository.Product:
+    properties:
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      price:
+        type: number
+      rack_id:
+        type: integer
+      sku:
+        type: string
+      upc:
+        type: string
+    type: object
+  repository.Rack:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      rack_code:
+        type: string
+      store_id:
+        type: integer
+      x_coordinate:
+        type: string
+      y_coordinate:
+        type: string
+      zone:
+        type: string
+    type: object
+  repository.Store:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      logo:
+        type: string
+      name:
+        type: string
+    type: object
+  repository.Transaction:
+    properties:
+      cart_id:
+        type: integer
+      cashier_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/repository.CartItem'
+        type: array
+      paid_at:
+        type: string
+      payment_amount:
+        type: integer
+      payment_method:
+        type: integer
+      payment_status:
+        type: integer
+      total_amount:
+        type: integer
+      transaction_code:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Backend API for Selfcart application
+  title: Selfcart API
+  version: "1.0"
+paths:
+  /cart:
+    post:
+      consumes:
+      - application/json
+      description: Create a new cart for a customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: customer_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Cart'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new cart
+      tags:
+      - cart
+  /cart/{cart_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get cart details
+      parameters:
+      - description: Cart ID
+        in: path
+        name: cart_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Cart'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get cart details
+      tags:
+      - cart
+  /cart/add:
+    post:
+      consumes:
+      - application/json
+      description: Add an item to the cart
+      parameters:
+      - description: Cart ID
+        in: path
+        name: cart_id
+        required: true
+        type: integer
+      - description: Barcode
+        in: path
+        name: barcode
+        required: true
+        type: string
+      - description: Action
+        in: path
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Cart'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add an item to the cart
+      tags:
+      - cart
+  /cart/checkout:
+    post:
+      consumes:
+      - application/json
+      description: Check out the cart
+      parameters:
+      - description: Cart ID
+        in: path
+        name: cart_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Transaction'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Check out the cart
+      tags:
+      - cart
+  /cart/remove:
+    post:
+      consumes:
+      - application/json
+      description: Remove an item from the cart
+      parameters:
+      - description: Cart ID
+        in: path
+        name: cart_id
+        required: true
+        type: integer
+      - description: Item ID
+        in: path
+        name: item_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Cart'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Remove an item from the cart
+      tags:
+      - cart
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Get all categories details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Category'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all categories
+      tags:
+      - categories
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get all products details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Product'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all products
+      tags:
+      - products
+  /products/barcode/{barcode}:
+    get:
+      consumes:
+      - application/json
+      description: Get product details by its barcode
+      parameters:
+      - description: Product Barcode
+        in: path
+        name: barcode
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Product'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get product by barcode
+      tags:
+      - products
+  /products/category/{category_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get products details by its category
+      parameters:
+      - description: Category ID
+        in: path
+        name: category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Product'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get products by category
+      tags:
+      - products
+  /store:
+    get:
+      consumes:
+      - application/json
+      description: Get store details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Store'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get store details
+      tags:
+      - store
+  /store/rack/{store_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get rack details
+      parameters:
+      - description: Store ID
+        in: path
+        name: store_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Rack'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get rack details
+      tags:
+      - store
+swagger: "2.0"

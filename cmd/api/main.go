@@ -1,5 +1,11 @@
 package main
 
+// @title Selfcart API
+// @version 1.0
+// @description Backend API for Selfcart application
+// @host localhost:8080
+// @BasePath /api
+
 import (
 	"log"
 	"selfcart/internal/config"
@@ -10,6 +16,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
+	_ "selfcart/docs" // ⚠️ WAJIB (sesuai module name)
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -56,6 +67,8 @@ func main() {
 		api.GET("/cart/:cart_id", cartHandler.GetCart)
 		api.POST("/cart/checkout", cartHandler.CheckOut)
 	}
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/health", func(c *gin.Context) {
 		c.String(200, "OK")
 	})
