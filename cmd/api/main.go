@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"selfcart/internal/config"
 	"selfcart/internal/database"
 	"selfcart/internal/handler"
@@ -55,6 +56,11 @@ func main() {
 		api.GET("/cart/:cart_id", cartHandler.GetCart)
 		api.POST("/cart/checkout", cartHandler.CheckOut)
 	}
+	r.GET("/health", func(c *gin.Context) {
+		c.String(200, "OK")
+	})
+
+	log.Println("Server starting on port", cfg.AppPort)
 
 	r.Run(":" + cfg.AppPort)
 }
